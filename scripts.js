@@ -2,19 +2,41 @@ const canvas = document.querySelector("canvas")
 const ctx = canvas.getContext("2d")
 const size = 30
 const snake = [
-    {x: 200, y: 200},
-    {x: 230, y: 200},
-    {x: 260, y: 200}
+    { x: 200, y: 200 },
+    { x: 230, y: 200 }
 ]
+
+let direction = "right"
 
 const drawSnake = () => {
     ctx.fillStyle = "#ddd"
-    snake.forEach((position) => {
+    snake.forEach((position, index) => {
+
+        if (index == snake.length - 1) {
+            ctx.fillStyle = "#F0FFF0"
+        }
+
         ctx.fillRect(position.x, position.y, size, size)
     })
 }
 
-drawSnake()
+const moveSnack = () => {
 
-// ctx.fillStyle = "red"
-// ctx.fillRect(300, 300, 50, 100)
+    const head = snake[snake.length - 1]
+
+    snake.shift()
+
+    if (direction == "right") {
+        snake.push({ x: head.x + size, y: head.y })
+    }
+}
+
+setInterval(() => {
+    drawSnake()
+    moveSnack()
+}, 300
+)
+
+
+
+
