@@ -21,7 +21,7 @@ const drawSnake = () => {
 }
 
 const moveSnack = () => {
-    if(!direction) return 
+    if (!direction) return
 
     const head = snake[snake.length - 1]
 
@@ -35,7 +35,7 @@ const moveSnack = () => {
     }
 
     if (direction == "down") {
-        snake.push({ x: head.x, y: head.y +  size })
+        snake.push({ x: head.x, y: head.y + size })
     }
 
     if (direction == "up") {
@@ -45,13 +45,32 @@ const moveSnack = () => {
     snake.shift()
 }
 
-    const gameLoop = () => {
-        clearInterval(loopId)
-    ctx.clearRect(0, 0, 600, 600)
+const drawGrid = () => {
+    ctx.lineWidth = 1
+    ctx.strokeStyle = "#191919"
 
+   for (let i = 30; i < canvas.width; i += 30) {
+
+    ctx.beginPath()
+    ctx.lineTo(i, 0)
+    ctx.lineTo(i, 600)
+    ctx.stroke()
+
+    ctx.beginPath()
+    ctx.lineTo(0, i)
+    ctx.lineTo(600, i)
+    ctx.stroke()
+   }
+}
+
+
+const gameLoop = () => {
+    clearInterval(loopId)
+    ctx.clearRect(0, 0, 600, 600)
+    drawGrid()
     moveSnack()
     drawSnake()
-    
+
 
     loopId = setTimeout(() => {
         gameLoop()
@@ -60,20 +79,20 @@ const moveSnack = () => {
 
 gameLoop()
 
-document.addEventListener("keydown", ({key}) => {
-    if(key == "ArrowRight" && direction != "left") {
+document.addEventListener("keydown", ({ key }) => {
+    if (key == "ArrowRight" && direction != "left") {
         direction = "right"
     }
 
-    else if(key == "ArrowLeft" && direction != "right") {
+    else if (key == "ArrowLeft" && direction != "right") {
         direction = "left"
     }
 
-    else if(key == "ArrowUp" && direction != "down") {
+    else if (key == "ArrowUp" && direction != "down") {
         direction = "up"
     }
 
-    else if(key == "ArrowDown" && direction != "up") {
+    else if (key == "ArrowDown" && direction != "up") {
         direction = "down"
     }
 })
