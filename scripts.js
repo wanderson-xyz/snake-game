@@ -1,12 +1,49 @@
 const canvas = document.querySelector("canvas")
 const ctx = canvas.getContext("2d")
+const h1 = document.querySelector("h1")
 const size = 30
 const snake = [
     { x: 300, y: 330 },
     { x: 300, y: 300 }
 ]
+const randomNumber = (min, max) => {
+    return Math.round(Math.random() * (max - min) + min)
+
+}
+
+const randomPosition = () => {
+    const number = randomNumber(0, canvas.width - size)
+    return Math.round(number / 30) * 30
+
+}
+
+const randomColor = () => {
+    const red = randomNumber(0, 255)
+    const green = randomNumber(0, 255)
+    const blue = randomNumber(0, 255)
+
+    return `rgb(${red}, ${green}, ${blue})`
+}
+
+h1.innerText = randomPosition()
+
+const food = {
+    x: randomPosition(),
+    y: randomPosition(),
+    color: randomColor()
+}
 
 let direction, loopId
+
+const drawFood = () => {
+    const { x, y, color } = food
+
+    ctx.shadowColor = color
+    ctx.shadowBlur = 50
+    ctx.fillStyle = color
+    ctx.fillRect(x, y, size, size)
+    ctx.shadowBlur = 0
+}
 
 const drawSnake = () => {
     ctx.fillStyle = "#ddd"
@@ -49,18 +86,29 @@ const drawGrid = () => {
     ctx.lineWidth = 1
     ctx.strokeStyle = "#191919"
 
-   for (let i = 30; i < canvas.width; i += 30) {
+    for (let i = 30; i < canvas.width; i += 30) {
 
-    ctx.beginPath()
-    ctx.lineTo(i, 0)
-    ctx.lineTo(i, 600)
-    ctx.stroke()
+        ctx.beginPath()
+        ctx.lineTo(i, 0)
+        ctx.lineTo(i, 600)
+        ctx.stroke()
 
-    ctx.beginPath()
-    ctx.lineTo(0, i)
-    ctx.lineTo(600, i)
-    ctx.stroke()
-   }
+        ctx.beginPath()
+        ctx.lineTo(0, i)
+        ctx.lineTo(600, i)
+        ctx.stroke()
+    }
+}
+
+const chackEat = () => {
+    const head = snake[snake.length - 1]
+
+    if (head.x == food.x && head.y == food.y) {
+        snake.push(head)
+        food.x = randomPosition()
+        food.y = randomPosition()
+        food.color = randomColor()
+    }
 }
 
 
@@ -70,6 +118,8 @@ const gameLoop = () => {
     drawGrid()
     moveSnack()
     drawSnake()
+    drawFood()
+    chackEat()
 
 
     loopId = setTimeout(() => {
